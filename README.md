@@ -1,2 +1,6 @@
 # Public server configs for kubernetes
-  - Aj Portfolio
+
+- Aj Portfolio
+  - Database
+  - Wordpress (backend)
+  - Frontend

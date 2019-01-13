@@ -1,0 +1,57 @@
+##### APP (BACKEND) #####
+# PVC
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  # Name
+  name: app-backend-pvc
+  # Labels
+  labels:
+    app: app
+spec:
+  # Access
+  accessModes:
+    - ReadWriteOnce
+  # Resources
+  resources:
+    requests:
+      storage: 4G
+
+---
+##### MYSQL #####
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  # Name
+  name: mysql-pvc
+  # Labels
+  labels:
+    app: mysql
+    tier: database
+spec:
+  # Access
+  accessModes:
+    - ReadWriteOnce
+  # Resources
+  resources:
+    requests:
+      storage: 5G
+
+---
+##### NGINX #####
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  # Name
+  name: nginx-pvc
+  # Labels
+  labels:
+    app: nginx
+spec:
+  # Access
+  accessModes:
+    - ReadWriteOnce
+  # Resources
+  resources:
+    requests:
+      storage: 100M
