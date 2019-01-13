@@ -36,22 +36,3 @@ spec:
   resources:
     requests:
       storage: 5G
-
----
-##### NGINX #####
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  # Name
-  name: nginx-pvc
-  # Labels
-  labels:
-    app: nginx
-spec:
-  # Access
-  accessModes:
-    - ReadWriteOnce
-  # Resources
-  resources:
-    requests:
-      storage: 100M
