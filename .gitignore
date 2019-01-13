@@ -74,3 +74,5 @@ wp-content/plugins/hyperdb*
 ## Kubernetes
 secret.yml
 secret.yaml
+secrets.yml
+secrets.yaml
