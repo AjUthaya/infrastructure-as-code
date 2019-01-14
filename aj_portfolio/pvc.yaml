@@ -1,13 +1,13 @@
-##### APP (BACKEND) #####
+##### WordPress Uploads #####
 # PVC
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   # Name
-  name: app-pvc
+  name: wordpress-pvc
   # Labels
   labels:
-    app: app
+    app: wordpress
 spec:
   # Access
   accessModes:
