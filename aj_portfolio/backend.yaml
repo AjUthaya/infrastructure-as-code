@@ -133,8 +133,6 @@ spec:
           volumeMounts:
             - name: wordpress-persistent-volume
               mountPath: /opt/app/aj_portfolio/data/wordpress
-            - name: nginx-config
-              mountPath: /opt/app/aj_portfolio/config/nginx
             - name: wordpress-config
               mountPath: /opt/app/aj_portfolio/config/wordpress
           # Run on startup
@@ -144,13 +142,11 @@ spec:
                 command: [
                     "/bin/sh",
                     "-c",
-                    # Copy nginx config
                     # Clone project
                     # Copy config into project folder
                     # Clean out nginx view folder
                     # Copy project into nginx view folder
-                    "cp /opt/app/aj_portfolio/config/nginx/default.conf /etc/nginx/conf.d/default.conf &&
-                    git clone https://github.com/AjUthaya/aj_portfolio-backend-wordpress.git /opt/app/aj_portfolio/backend &&
+                    "git clone https://github.com/AjUthaya/aj_portfolio-backend-wordpress.git /opt/app/aj_portfolio/backend &&
                     cp /opt/app/aj_portfolio/config/wordpress/wp-config.php /opt/app/aj_portfolio/backend/wp-config.php &&
                     rm -R /usr/share/nginx/html/* &&
                     cp -R /opt/app/aj_portfolio/backend/* /usr/share/nginx/html",
@@ -161,13 +157,6 @@ spec:
         - name: wordpress-persistent-volume
           persistentVolumeClaim:
             claimName: wordpress-pvc
-        # NGINX CONFIG
-        - name: nginx-config
-          configMap:
-            name: nginx
-            items:
-              - key: config
-                path: default.conf
         # WORDPRESS CONFIG
         - name: wordpress-config
           secret:
