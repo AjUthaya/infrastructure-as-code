@@ -1,99 +1,3 @@
-##### MYSQL #####
-# DEPLOYMENT
-apiVersion: apps/v1beta2
-kind: Deployment
-metadata:
-  # Name
-  name: database-deployment
-  # Labels
-  labels:
-    app: mysql
-    tier: database
-# POD
-spec:
-  replicas: 1
-  selector:
-    # Nodes that match labels
-    matchLabels:
-      app: mysql
-      tier: database
-  strategy:
-    type: RollingUpdate
-  template:
-    metadata:
-      # Labels
-      labels:
-        app: mysql
-        tier: database
-    spec:
-      containers:
-        # Image
-        - image: mysql:5.6
-          # Name
-          name: database-pod
-          # Environment variables
-          env:
-            # MYSQL: Root Password
-            - name: MYSQL_ROOT_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: mysql
-                  key: ROOT_PASSWORD
-            # MYSQL: Database
-            - name: MYSQL_DATABASE
-              valueFrom:
-                secretKeyRef:
-                  name: mysql
-                  key: DATABASE
-            # MYSQL: Username
-            - name: MYSQL_USER
-              valueFrom:
-                secretKeyRef:
-                  name: mysql
-                  key: USER
-            # MYSQL: Password
-            - name: MYSQL_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: mysql
-                  key: PASSWORD
-          # Map exposed ports
-          ports:
-            - containerPort: 3306
-          # Mount volume locations
-          volumeMounts:
-            - name: mysql-persistent-volume
-              mountPath: /var/lib/mysql
-      # Connect persistent volumes
-      volumes:
-        - name: mysql-persistent-volume
-          persistentVolumeClaim:
-            claimName: mysql-pvc
-
----
-# SERVICE
-apiVersion: v1
-kind: Service
-metadata:
-  # Name
-  name: database-service
-  # Labels
-  labels:
-    app: mysql
-    tier: database
-spec:
-  selector:
-    app: mysql
-    tier: database
-  clusterIP: None
-##### MYSQL #####
-#
-#
-#
-#
-#
----
-##### NGINX #####
 # DEPLOYMENT
 apiVersion: apps/v1beta2
 kind: Deployment
@@ -102,7 +6,7 @@ metadata:
   name: backend-deployment
   # Labels
   labels:
-    app: nginx
+    app: wordpress
     tier: backend
 # POD
 spec:
@@ -110,7 +14,7 @@ spec:
   selector:
     # Nodes that match labels
     matchLabels:
-      app: nginx
+      app: wordpress
       tier: backend
   strategy:
     type: RollingUpdate
@@ -118,7 +22,7 @@ spec:
     metadata:
       # Labels
       labels:
-        app: nginx
+        app: wordpress
         tier: backend
     spec:
       containers:
@@ -126,6 +30,29 @@ spec:
         - image: ajuthaya/nginx-php
           # Name
           name: backend-pod
+          # Environment variables
+          env:
+            # MYSQL: Host
+            - name: WORDPRESS_DB_HOST
+              value: database-service
+            # MYSQL: Database
+            - name: WORDPRESS_DB
+              valueFrom:
+                secretKeyRef:
+                  name: passwords
+                  key: MYSQL_DATABASE
+            # MYSQL: Username
+            - name: WORDPRESS_DB_USER
+              valueFrom:
+                secretKeyRef:
+                  name: passwords
+                  key: MYSQL_USER
+            # MYSQL: Password
+            - name: WORDPRESS_DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: passwords
+                  key: MYSQL_DATABASE
           # Map exposed ports
           ports:
             - containerPort: 80
@@ -151,7 +78,7 @@ spec:
                     rm -R /usr/share/nginx/html/* &&
                     cp -R /opt/app/aj_portfolio/backend/* /usr/share/nginx/html",
                   ]
-      # Connect persistent volumes
+      # Connect volumes
       volumes:
         # WordPress Uploads
         - name: wordpress-persistent-volume
@@ -174,14 +101,13 @@ metadata:
   name: backend-service
   # Labels
   labels:
-    app: nginx
-    tier: backend
+    app: wordpress
+    tier: frontend
 spec:
   type: NodePort
   ports:
     - protocol: TCP
       port: 80
   selector:
-    app: nginx
+    app: wordpress
     tier: backend
-##### NGINX #####

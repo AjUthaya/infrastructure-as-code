@@ -1,0 +1,99 @@
+# DEPLOYMENT
+apiVersion: apps/v1beta2
+kind: Deployment
+metadata:
+  # Name
+  name: database-deployment
+  # Labels
+  labels:
+    app: mysql
+    tier: database
+# POD
+spec:
+  replicas: 1
+  selector:
+    # Nodes that match labels
+    matchLabels:
+      app: mysql
+      tier: database
+  strategy:
+    type: RollingUpdate
+  template:
+    metadata:
+      # Labels
+      labels:
+        app: mysql
+        tier: database
+    spec:
+      containers:
+        # Image
+        - image: mysql:5.6
+          # Name
+          name: database-pod
+          # Environment variables
+          env:
+            # MYSQL: Root Password
+            - name: MYSQL_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: passwords
+                  key: MYSQL_ROOT_PASSWORD
+            # MYSQL: Database
+            - name: MYSQL_DATABASE
+              valueFrom:
+                secretKeyRef:
+                  name: passwords
+                  key: MYSQL_DATABASE
+            # MYSQL: Username
+            - name: MYSQL_USER
+              valueFrom:
+                secretKeyRef:
+                  name: passwords
+                  key: MYSQL_USER
+            # MYSQL: Password
+            - name: MYSQL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: passwords
+                  key: MYSQL_PASSWORD
+          # Map exposed ports
+          ports:
+            - containerPort: 3306
+          # Mount volume locations
+          volumeMounts:
+            - name: mysql-persistent-volume
+              mountPath: /var/lib/mysql
+            - name: mysql-config
+              mountPath: /opt/app/aj_portfolio/config/mysql
+      # Connect persistent volumes
+      volumes:
+        # MYSQL persistent storage
+        - name: mysql-persistent-volume
+          persistentVolumeClaim:
+            claimName: mysql-pvc
+        # Init SQL file
+        - name: mysql-config
+          secret:
+            secretName: mysql
+            items:
+              - key: config
+                path: database.sql
+
+---
+# SERVICE
+apiVersion: v1
+kind: Service
+metadata:
+  # Name
+  name: database-service
+  # Labels
+  labels:
+    app: mysql
+    tier: database
+spec:
+  ports:
+    - port: 3306
+  selector:
+    app: wordpress
+    tier: backend
+  clusterIP: None
