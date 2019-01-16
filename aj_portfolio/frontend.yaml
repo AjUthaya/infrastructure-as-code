@@ -27,7 +27,7 @@ spec:
     spec:
       containers:
         # Image
-        - image: ajuthaya/nginx
+        - image: ajuthaya/nginx-node
           # Name
           name: frontend-pod
           # Map exposed ports
@@ -47,12 +47,15 @@ spec:
                   "-c",
                   # Clone project
                   # Copy config into project folder
-                  # Clean out nginx view folder
-                  # Copy project into nginx view folder
+                  # Install npm packages
+                  # Build project
+                  # Copy build into nginx view folder
                   "git clone https://github.com/AjUthaya/aj_portfolio-frontend-react.git /opt/app/aj_portfolio/frontend &&
-                  cp /opt/app/aj_portfolio/config/react/local.js /opt/app/aj_portfolio/frontend/local.js &&
+                  cp /opt/app/aj_portfolio/config/react/local.js /opt/app/aj_portfolio/frontend/src/local.js &&
+                  cd /opt/app/aj_portfolio/frontend && npm install &&
+                  npm run build &&
                   rm -R /usr/share/nginx/html/* &&
-                  cp -R /opt/app/aj_portfolio/frontend/* /usr/share/nginx/html",
+                  cp -R /opt/app/aj_portfolio/frontend/build/* /usr/share/nginx/html",
                 ]
       # Connect volumes
       volumes:
