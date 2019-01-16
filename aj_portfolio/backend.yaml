@@ -103,7 +103,7 @@ metadata:
   # Labels
   labels:
     app: wordpress
-    tier: frontend
+    tier: backend
 spec:
   type: NodePort
   ports:

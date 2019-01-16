@@ -15,11 +15,13 @@
    - wordpress: `kubectl create secret generic wordpress --from-file=config=./config/wordpress/wp-config.php`
    - react: `kubectl create secret generic react --from-file=config=./config/react/local.js`
 
-3. Setup persistent volume claims: `kubectl apply -f ./pvc.yaml`
+3. Setup persistent volumes: `kubectl apply -f ./pvc.yaml`
 
-4. Setup database deployments and services: `kubectl create -f ./database.yaml`
+4. Setup database: `kubectl create -f ./database.yaml`
 
-5. Setup backend deployments and services: `kubectl create -f ./backend.yaml`
+5. Setup backend: `kubectl create -f ./backend.yaml`
+
+6. Setup backend: `kubectl create -f ./frontend.yaml`
 
 ## First time setup
 

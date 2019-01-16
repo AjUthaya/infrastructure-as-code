@@ -1,0 +1,85 @@
+# DEPLOYMENT
+apiVersion: apps/v1beta2
+kind: Deployment
+metadata:
+  # Name
+  name: frontend
+  # Labels
+  labels:
+    app: react
+    tier: frontend
+# POD
+spec:
+  replicas: 1
+  selector:
+    # Nodes that match labels
+    matchLabels:
+      app: react
+      tier: frontend
+  strategy:
+    type: RollingUpdate
+  template:
+    metadata:
+      # Labels
+      labels:
+        app: react
+        tier: frontend
+    spec:
+      containers:
+        # Image
+        - image: ajuthaya/nginx
+          # Name
+          name: frontend-pod
+          # Map exposed ports
+          ports:
+            - containerPort: 80
+              name: react
+          # Mount volume locations
+          volumeMounts:
+            - name: react-config
+              mountPath: /opt/app/aj_portfolio/config/react
+          # Run on startup
+          lifecycle:
+            postStart:
+              exec:
+                command: [
+                  "/bin/sh",
+                  "-c",
+                  # Clone project
+                  # Copy config into project folder
+                  # Clean out nginx view folder
+                  # Copy project into nginx view folder
+                  "git clone https://github.com/AjUthaya/aj_portfolio-frontend-react.git /opt/app/aj_portfolio/frontend &&
+                  cp /opt/app/aj_portfolio/config/react/local.js /opt/app/aj_portfolio/frontend/local.js &&
+                  rm -R /usr/share/nginx/html/* &&
+                  cp -R /opt/app/aj_portfolio/frontend/* /usr/share/nginx/html",
+                ]
+      # Connect volumes
+      volumes:
+        # REACT CONFIG
+        - name: react-config
+          secret:
+            secretName: react
+            items:
+              - key: config
+                path: local.js
+
+---
+# SERVICE
+apiVersion: v1
+kind: Service
+metadata:
+  # Name
+  name: frontend
+  # Labels
+  labels:
+    app: react
+    tier: frontend
+spec:
+  type: NodePort
+  ports:
+    - protocol: TCP
+      port: 80
+  selector:
+    app: react
+    tier: frontend
