@@ -29,8 +29,9 @@
 
    - Get all pods running: `kubectl get pods`
    - Look for the pod name that starts with "database-deployment-..."
-   - Go into the pod: `kubectl exec -it "database-deployment-..." bash`
+   - Go into the pod: `kubectl exec -it database-deployment-... bash`
    - Login to mysql: `mysql -u USERNAME -pPASSWORD`
-   - Source the SQL file: `source /opt/app/aj_portfolio/config/mysql/database.sql`
+   - Select database: `use aj_portfolio;`
+   - Source the SQL file: `source /opt/app/aj_portfolio/config/mysql/database.sql;`
 
 3. Initialize wordpress uploads:

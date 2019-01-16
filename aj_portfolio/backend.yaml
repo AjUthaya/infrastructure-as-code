@@ -3,7 +3,7 @@ apiVersion: apps/v1beta2
 kind: Deployment
 metadata:
   # Name
-  name: backend-deployment
+  name: backend
   # Labels
   labels:
     app: wordpress
@@ -34,7 +34,7 @@ spec:
           env:
             # MYSQL: Host
             - name: WORDPRESS_DB_HOST
-              value: database-service
+              value: database
             # MYSQL: Database
             - name: WORDPRESS_DB
               valueFrom:
@@ -52,10 +52,11 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: passwords
-                  key: MYSQL_DATABASE
+                  key: MYSQL_PASSWORD
           # Map exposed ports
           ports:
             - containerPort: 80
+              name: wordpress
           # Mount volume locations
           volumeMounts:
             - name: wordpress-persistent-volume
@@ -67,17 +68,17 @@ spec:
             postStart:
               exec:
                 command: [
-                    "/bin/sh",
-                    "-c",
-                    # Clone project
-                    # Copy config into project folder
-                    # Clean out nginx view folder
-                    # Copy project into nginx view folder
-                    "git clone https://github.com/AjUthaya/aj_portfolio-backend-wordpress.git /opt/app/aj_portfolio/backend &&
-                    cp /opt/app/aj_portfolio/config/wordpress/wp-config.php /opt/app/aj_portfolio/backend/wp-config.php &&
-                    rm -R /usr/share/nginx/html/* &&
-                    cp -R /opt/app/aj_portfolio/backend/* /usr/share/nginx/html",
-                  ]
+                  "/bin/sh",
+                  "-c",
+                  # Clone project
+                  # Copy config into project folder
+                  # Clean out nginx view folder
+                  # Copy project into nginx view folder
+                  "git clone https://github.com/AjUthaya/aj_portfolio-backend-wordpress.git /opt/app/aj_portfolio/backend &&
+                  cp /opt/app/aj_portfolio/config/wordpress/wp-config.php /opt/app/aj_portfolio/backend/wp-config.php &&
+                  rm -R /usr/share/nginx/html/* &&
+                  cp -R /opt/app/aj_portfolio/backend/* /usr/share/nginx/html",
+                ]
       # Connect volumes
       volumes:
         # WordPress Uploads
@@ -98,7 +99,7 @@ apiVersion: v1
 kind: Service
 metadata:
   # Name
-  name: backend-service
+  name: backend
   # Labels
   labels:
     app: wordpress

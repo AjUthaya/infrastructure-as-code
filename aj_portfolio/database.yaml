@@ -3,7 +3,7 @@ apiVersion: apps/v1beta2
 kind: Deployment
 metadata:
   # Name
-  name: database-deployment
+  name: database
   # Labels
   labels:
     app: mysql
@@ -27,7 +27,7 @@ spec:
     spec:
       containers:
         # Image
-        - image: mysql:5.6
+        - image: mysql:5.7
           # Name
           name: database-pod
           # Environment variables
@@ -59,6 +59,7 @@ spec:
           # Map exposed ports
           ports:
             - containerPort: 3306
+              name: mysql
           # Mount volume locations
           volumeMounts:
             - name: mysql-persistent-volume
@@ -85,7 +86,7 @@ apiVersion: v1
 kind: Service
 metadata:
   # Name
-  name: database-service
+  name: database
   # Labels
   labels:
     app: mysql
@@ -94,6 +95,6 @@ spec:
   ports:
     - port: 3306
   selector:
-    app: wordpress
-    tier: backend
+    app: mysql
+    tier: database
   clusterIP: None
