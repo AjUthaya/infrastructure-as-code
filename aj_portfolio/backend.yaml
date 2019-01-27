@@ -77,11 +77,13 @@ spec:
                   # Copy upload files into projects folder
                   # Clean out nginx view folder
                   # Copy project into nginx view folder
+                  # Change owner of html folder
                   "git clone https://github.com/AjUthaya/aj_portfolio-backend-wordpress.git /opt/app/aj_portfolio/backend &&
                   cp /opt/app/aj_portfolio/config/wordpress/wp-config.php /opt/app/aj_portfolio/backend/wp-config.php &&
                   cp -R /opt/app/aj_portfolio/data/wordpress/uploads /opt/app/aj_portfolio/backend/wp-content/ &&
                   rm -R /usr/share/nginx/html/* &&
-                  cp -R /opt/app/aj_portfolio/backend/* /usr/share/nginx/html",
+                  cp -R /opt/app/aj_portfolio/backend/* /usr/share/nginx/html &&
+                  chown -R www-data:www-data /usr/share/nginx/html",
                 ]
       # Connect volumes
       volumes:
