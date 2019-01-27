@@ -15,7 +15,8 @@ spec:
   # Resources
   resources:
     requests:
-      storage: 4G
+      storage: 5G
+  storageClassName: do-block-storage
 
 ---
 ##### MYSQL #####
@@ -36,3 +37,4 @@ spec:
   resources:
     requests:
       storage: 5G
+  storageClassName: do-block-storage

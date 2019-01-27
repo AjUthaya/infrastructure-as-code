@@ -10,10 +10,10 @@
 
 2. Setup secrets:
 
-   - passwords: `kubectl apply -f ./secrets.yaml`
-   - mysql: `kubectl create secret generic mysql --from-file=config=./config/mysql/aj_portfolio.sql`
-   - wordpress: `kubectl create secret generic wordpress --from-file=config=./config/wordpress/wp-config.php`
-   - react: `kubectl create secret generic react --from-file=config=./config/react/local.js`
+   - Passwords: `kubectl apply -f ./secrets.yaml`
+   - Database: `kubectl create secret generic database --from-file=config=./config/database/aj_portfolio.sql`
+   - Backend: `kubectl create secret generic backend --from-file=config=./config/backend/wp-config.php --from-file=nginx=./config/backend/admin.aj-portfolio.com.conf`
+   - Frontend: `kubectl create secret generic frontend --from-file=config=./config/frontend/local.js --from-file=nginx=./config/frontend/aj-portfolio.com.conf`
 
 3. Setup persistent volumes: `kubectl apply -f ./pvc.yaml`
 
@@ -21,7 +21,11 @@
 
 5. Setup backend: `kubectl create -f ./backend.yaml`
 
-6. Setup backend: `kubectl create -f ./frontend.yaml`
+   - Will show a network issue, just wait a few secounds for the network to resolve
+
+6. Setup frontend: `kubectl create -f ./frontend.yaml`
+
+   - Will show a network issue, just wait a few secounds for the network to resolve
 
 ## First time setup
 
@@ -29,11 +33,13 @@
 
 2. Initialize database:
 
+   More info coming soon
+
    - Get all pods running: `kubectl get pods`
    - Look for the pod name that starts with "database-deployment-..."
    - Go into the pod: `kubectl exec -it database-deployment-... bash`
    - Login to mysql: `mysql -u USERNAME -pPASSWORD`
    - Select database: `use aj_portfolio;`
-   - Source the SQL file: `source /opt/app/aj_portfolio/config/mysql/database.sql;`
+   - Source the SQL file: `source /opt/app/aj_portfolio/config/mysql/aj_portfolio.sql;`
 
 3. Initialize wordpress uploads:

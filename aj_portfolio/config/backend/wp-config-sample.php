@@ -28,6 +28,7 @@ define('NONCE_SALT',       'ENTER_YOUR_KEY_HERE');
 
 
 // SSL, Site url, Etc
+$_SERVER['HTTPS'] = 'on';
 define('FORCE_SSL_LOGIN', false);
 define('WP_POST_REVISIONS', false);
 define('WP_TURN_OFF_ADMIN_BAR', false);
@@ -76,14 +77,14 @@ if ($env === 'prod') {
 
 
 // Debug
+define('WP_DEBUG', true);
+define('WP_DEBUG_LOG', true);
+
+// Display debug
 if ($env === 'prod') {
-    define('WP_DEBUG', false);
     define('WP_DEBUG_DISPLAY', false);
-    define('WP_DEBUG_LOG', false);
 } else {
-    define('WP_DEBUG', true);
     define('WP_DEBUG_DISPLAY', true);
-    define('WP_DEBUG_LOG', true);
 }
 
 

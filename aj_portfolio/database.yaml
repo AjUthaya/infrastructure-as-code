@@ -60,10 +60,11 @@ spec:
           ports:
             - containerPort: 3306
               name: mysql
-          # Mount volume locations
+            # Mount volume locations
           volumeMounts:
             - name: mysql-persistent-volume
               mountPath: /var/lib/mysql
+              #mountPath: /opt/app/mysql
             - name: mysql-config
               mountPath: /opt/app/aj_portfolio/config/mysql
       # Connect persistent volumes
@@ -75,10 +76,10 @@ spec:
         # Init SQL file
         - name: mysql-config
           secret:
-            secretName: mysql
+            secretName: database
             items:
               - key: config
-                path: database.sql
+                path: aj_portfolio.sql
 
 ---
 # SERVICE

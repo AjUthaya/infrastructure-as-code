@@ -63,6 +63,8 @@ spec:
               mountPath: /opt/app/aj_portfolio/data/wordpress
             - name: wordpress-config
               mountPath: /opt/app/aj_portfolio/config/wordpress
+            - name: nginx-config
+              mountPath: /opt/app/aj_portfolio/config/nginx
           # Run on startup
           lifecycle:
             postStart:
@@ -88,10 +90,17 @@ spec:
         # WORDPRESS CONFIG
         - name: wordpress-config
           secret:
-            secretName: wordpress
+            secretName: backend
             items:
               - key: config
                 path: wp-config.php
+        # NGINX CONFIG
+        - name: nginx-config
+          secret:
+            secretName: backend
+            items:
+              - key: nginx
+                path: admin.aj-portfolio.com.conf
 
 ---
 # SERVICE
@@ -105,10 +114,11 @@ metadata:
     app: wordpress
     tier: backend
 spec:
-  type: NodePort
+  type: LoadBalancer
   ports:
-    - protocol: TCP
-      port: 80
+    - port: 80
+      nodePort: 30001
+      targetPort: 80
   selector:
     app: wordpress
     tier: backend

@@ -36,7 +36,7 @@ spec:
               name: react
           # Mount volume locations
           volumeMounts:
-            - name: react-config
+            - name: frontend-config
               mountPath: /opt/app/aj_portfolio/config/react
           # Run on startup
           lifecycle:
@@ -60,9 +60,9 @@ spec:
       # Connect volumes
       volumes:
         # REACT CONFIG
-        - name: react-config
+        - name: frontend-config
           secret:
-            secretName: react
+            secretName: frontend
             items:
               - key: config
                 path: local.js
@@ -79,10 +79,11 @@ metadata:
     app: react
     tier: frontend
 spec:
-  type: NodePort
+  type: LoadBalancer
   ports:
-    - protocol: TCP
-      port: 80
+    - port: 80
+      nodePort: 30000
+      targetPort: 80
   selector:
     app: react
     tier: frontend
