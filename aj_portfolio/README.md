@@ -12,8 +12,8 @@
 
    - Passwords: `kubectl create -f ./secrets.yaml`
    - Database: `kubectl create secret generic database --from-file=config=./config/database/aj_portfolio.sql`
-   - Backend: `kubectl create secret generic backend --from-file=config=./config/backend/wp-config.php --from-file=nginx=./config/backend/admin.aj-portfolio.com.conf`
-   - Frontend: `kubectl create secret generic frontend --from-file=config=./config/frontend/local.js --from-file=nginx=./config/frontend/aj-portfolio.com.conf`
+   - Backend: `kubectl create secret generic backend --from-file=config=./config/backend/wp-config.php`
+   - Frontend: `kubectl create secret generic frontend --from-file=config=./config/frontend/local.js`
 
 3. Setup persistent volumes: `kubectl create -f ./pvc.yaml`
 
