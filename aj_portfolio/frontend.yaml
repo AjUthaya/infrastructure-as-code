@@ -41,8 +41,8 @@ spec:
           # Resources
           resources:
             limits:
-              cpu: 500m
-              memory: 500Mi
+              cpu: 1000m
+              memory: 1Gi
             requests:
               cpu: 250m
               memory: 250Mi
@@ -54,7 +54,23 @@ spec:
           ports:
             - containerPort: 80
               name: react
-          # Run on startup
+          # Readiness
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 80
+            initialDelaySeconds: 30
+            timeoutSeconds: 5
+            periodSeconds: 5
+          # Liveness
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 80
+            initialDelaySeconds: 60
+            timeoutSeconds: 15
+            periodSeconds: 60
+          # Startup commands
           lifecycle:
             postStart:
               exec:

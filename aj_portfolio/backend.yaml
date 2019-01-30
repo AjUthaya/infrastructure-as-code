@@ -10,7 +10,7 @@ metadata:
     tier: backend
 # POD
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     # Select nodes
     matchLabels:
@@ -27,7 +27,7 @@ spec:
     spec:
       # Volumes
       volumes:
-        # WordPress Uploads
+        # WordPress uploads
         - name: wordpress-persistent-volume
           persistentVolumeClaim:
             claimName: wordpress-pvc
@@ -49,8 +49,8 @@ spec:
               cpu: 1000m
               memory: 1Gi
             requests:
-              cpu: 250m
-              memory: 250Mi
+              cpu: 300m
+              memory: 300Mi
           # Mount volumes
           volumeMounts:
             - name: wordpress-persistent-volume
@@ -63,28 +63,41 @@ spec:
               name: wordpress
           # Environment variables
           env:
-            # MYSQL: Host
+            # MYSQL
             - name: WORDPRESS_DB_HOST
               value: database
-            # MYSQL: Database
             - name: WORDPRESS_DB
               valueFrom:
                 secretKeyRef:
                   name: passwords
                   key: MYSQL_DATABASE
-            # MYSQL: Username
             - name: WORDPRESS_DB_USER
               valueFrom:
                 secretKeyRef:
                   name: passwords
                   key: MYSQL_USER
-            # MYSQL: Password
             - name: WORDPRESS_DB_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: passwords
                   key: MYSQL_PASSWORD
-          # Run on startup
+          # Readiness
+          readinessProbe:
+            httpGet:
+              path: /wp-json
+              port: 80
+            initialDelaySeconds: 10
+            timeoutSeconds: 5
+            periodSeconds: 5
+          # Liveness
+          livenessProbe:
+            httpGet:
+              path: /wp-json
+              port: 80
+            initialDelaySeconds: 20
+            timeoutSeconds: 15
+            periodSeconds: 30
+          # Startup commands
           lifecycle:
             postStart:
               exec:

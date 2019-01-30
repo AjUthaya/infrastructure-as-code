@@ -22,10 +22,12 @@
 5. Setup backend: `kubectl create -f ./backend.yaml`
 
    - Will show a network issue, just wait a few secounds for the network to resolve
+   - Wait for the backend to finish before you start the frontend
 
 6. Setup frontend: `kubectl create -f ./frontend.yaml`
 
    - Will show a network issue, just wait a few secounds for the network to resolve
+   - Takes a while to install all the packages
 
 ## First time setup
 
