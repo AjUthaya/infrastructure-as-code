@@ -25,49 +25,7 @@ spec:
         app: mysql
         tier: database
     spec:
-      containers:
-        # Image
-        - image: mysql:5.7
-          # Name
-          name: database-pod
-          # Environment variables
-          env:
-            # MYSQL: Root Password
-            - name: MYSQL_ROOT_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: passwords
-                  key: MYSQL_ROOT_PASSWORD
-            # MYSQL: Database
-            - name: MYSQL_DATABASE
-              valueFrom:
-                secretKeyRef:
-                  name: passwords
-                  key: MYSQL_DATABASE
-            # MYSQL: Username
-            - name: MYSQL_USER
-              valueFrom:
-                secretKeyRef:
-                  name: passwords
-                  key: MYSQL_USER
-            # MYSQL: Password
-            - name: MYSQL_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: passwords
-                  key: MYSQL_PASSWORD
-          # Map exposed ports
-          ports:
-            - containerPort: 3306
-              name: mysql
-            # Mount volume locations
-          volumeMounts:
-            - name: mysql-persistent-volume
-              mountPath: /var/lib/mysql
-              #mountPath: /opt/app/mysql
-            - name: mysql-config
-              mountPath: /opt/app/aj_portfolio/config/mysql
-      # Connect persistent volumes
+      # Volumes
       volumes:
         # MYSQL persistent storage
         - name: mysql-persistent-volume
@@ -80,22 +38,69 @@ spec:
             items:
               - key: config
                 path: aj_portfolio.sql
+      # Containers
+      containers:
+        # Image
+        - image: mysql:5.7
+          name: database-pod
+          # Resources
+          resources:
+            limits:
+              cpu: 1000m
+              memory: 1Gi
+            requests:
+              cpu: 250m
+              memory: 250Mi
+          # Mount volumes
+          volumeMounts:
+            - name: mysql-persistent-volume
+              mountPath: /var/lib/mysql
+              #mountPath: /opt/app/mysql
+            - name: mysql-config
+              mountPath: /opt/app/aj_portfolio/config/mysql
+          # Map ports
+          ports:
+            - containerPort: 3306
+              name: mysql
+          # ENV
+          env:
+            # ENV: MYSQL
+            - name: MYSQL_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: passwords
+                  key: MYSQL_ROOT_PASSWORD
+            - name: MYSQL_DATABASE
+              valueFrom:
+                secretKeyRef:
+                  name: passwords
+                  key: MYSQL_DATABASE
+            - name: MYSQL_USER
+              valueFrom:
+                secretKeyRef:
+                  name: passwords
+                  key: MYSQL_USER
+            - name: MYSQL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: passwords
+                  key: MYSQL_PASSWORD
 
 ---
 # SERVICE
 apiVersion: v1
 kind: Service
 metadata:
-  # Name
   name: database
-  # Labels
   labels:
     app: mysql
     tier: database
 spec:
-  ports:
-    - port: 3306
+  # Select pods
   selector:
     app: mysql
     tier: database
+  # Map ports
+  ports:
+    - port: 3306
   clusterIP: None

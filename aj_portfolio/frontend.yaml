@@ -11,13 +11,13 @@ metadata:
 # POD
 spec:
   replicas: 1
+  strategy:
+    type: RollingUpdate
   selector:
     # Nodes that match labels
     matchLabels:
       app: react
       tier: frontend
-  strategy:
-    type: RollingUpdate
   template:
     metadata:
       # Labels
@@ -25,19 +25,35 @@ spec:
         app: react
         tier: frontend
     spec:
+      # Volumes
+      volumes:
+        - name: frontend-config
+          secret:
+            secretName: frontend
+            items:
+              - key: config
+                path: local.js
+      # Containers
       containers:
         # Image
         - image: ajuthaya/nginx-node
-          # Name
           name: frontend-pod
-          # Map exposed ports
-          ports:
-            - containerPort: 80
-              name: react
-          # Mount volume locations
+          # Resources
+          resources:
+            limits:
+              cpu: 500m
+              memory: 500Mi
+            requests:
+              cpu: 250m
+              memory: 250Mi
+          # Mount volumes
           volumeMounts:
             - name: frontend-config
               mountPath: /opt/app/aj_portfolio/config/react
+          # Map ports
+          ports:
+            - containerPort: 80
+              name: react
           # Run on startup
           lifecycle:
             postStart:
@@ -57,33 +73,25 @@ spec:
                   rm -R /usr/share/nginx/html/* &&
                   cp -R /opt/app/aj_portfolio/frontend/build/* /usr/share/nginx/html",
                 ]
-      # Connect volumes
-      volumes:
-        # REACT CONFIG
-        - name: frontend-config
-          secret:
-            secretName: frontend
-            items:
-              - key: config
-                path: local.js
 
 ---
 # SERVICE
 apiVersion: v1
 kind: Service
 metadata:
-  # Name
   name: frontend
-  # Labels
   labels:
     app: react
     tier: frontend
 spec:
+  # Request handler
   type: LoadBalancer
+  # Select pods
+  selector:
+    app: react
+    tier: frontend
+  # Map ports
   ports:
     - port: 80
       nodePort: 30000
       targetPort: 80
-  selector:
-    app: react
-    tier: frontend
