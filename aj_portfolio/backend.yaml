@@ -42,6 +42,7 @@ spec:
       containers:
         # Image
         - image: ajuthaya/nginx-php
+          imagePullPolicy: Always
           name: backend-pod
           # Resources
           resources:

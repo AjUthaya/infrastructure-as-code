@@ -42,6 +42,7 @@ spec:
       containers:
         # Image
         - image: mysql:5.7
+¨         imagePullPolicy: Always
           name: database-pod
           # Resources
           resources:

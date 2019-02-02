@@ -37,6 +37,7 @@ spec:
       containers:
         # Image
         - image: ajuthaya/nginx-node
+          imagePullPolicy: Always
           name: frontend-pod
           # Resources
           resources:
@@ -79,15 +80,16 @@ spec:
                   "-c",
                   # Clone project
                   # Copy config into project folder
-                  # Install npm packages
+                  # Install production packages only
                   # Build project
                   # Copy build into nginx view folder
                   "git clone https://github.com/AjUthaya/aj_portfolio-frontend-react.git /opt/app/aj_portfolio/frontend &&
                   cp /opt/app/aj_portfolio/config/react/local.js /opt/app/aj_portfolio/frontend/src/local.js &&
-                  cd /opt/app/aj_portfolio/frontend && npm install &&
+                  cd /opt/app/aj_portfolio/frontend &&
+                  npm install --production &&
                   npm run build &&
                   rm -R /usr/share/nginx/html/* &&
-                  cp -R /opt/app/aj_portfolio/frontend/build/* /usr/share/nginx/html",
+                  cp -R /opt/app/aj_portfolio/frontend/build/* /usr/share/nginx/html"
                 ]
 
 ---

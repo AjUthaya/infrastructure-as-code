@@ -17,17 +17,17 @@
 
 3. Setup persistent volumes: `kubectl create -f ./pvc.yaml`
 
-4. Setup database: `kubectl create -f ./database.yaml`
-
-5. Setup backend: `kubectl create -f ./backend.yaml`
-
-   - Will show a network issue, just wait a few secounds for the network to resolve
-   - Wait for the backend to finish before you start the frontend
-
-6. Setup frontend: `kubectl create -f ./frontend.yaml`
+4. Setup frontend: `kubectl create -f ./frontend.yaml`
 
    - Will show a network issue, just wait a few secounds for the network to resolve
    - Takes a while to install all the packages
+
+5. Setup database: `kubectl create -f ./database.yaml`
+
+6. Setup backend: `kubectl create -f ./backend.yaml`
+
+   - Will show a network issue, just wait a few secounds for the network to resolve
+   - Wait for the backend to finish before you start the frontend
 
 ## First time setup
 
