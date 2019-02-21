@@ -1,4 +1,6 @@
-# Public server configs for kubernetes
+# AJ Servers (Public)
+
+![logo_banner](https://imgur.com/Eh3YGwe.png)
 
 ## Setup
 
