@@ -14,3 +14,7 @@ Required dependencies:
   - Database
   - Wordpress (backend)
   - Frontend
+
+## Infrastructure
+
+![infrastructure_design](https://imgur.com/7afFXjT.png)
