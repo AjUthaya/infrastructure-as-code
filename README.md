@@ -11,9 +11,9 @@ Required dependencies:
 ## Repos
 
 - Aj Portfolio
-  - Database
-  - Wordpress (backend)
-  - Frontend
+  - Database (MySQL)
+  - Backend (WordPress)
+  - Frontend (ReactJS)
 
 ## Infrastructure
 
