@@ -2,7 +2,7 @@
 
 ![logo_banner](https://imgur.com/Eh3YGwe.png)
 
-This is the infrastructure as code repository to store all the deployment files for kubernetes, also instruction on how to setup a kubernetes on a server. So that if for some reason i need to change my hosting provider, i can easily and quickly setup another server. Then setup all the projects with the kubernetes deployment files.
+Infrastructure as code repository to store all the deployment files for kubernetes, also instruction on how to setup kubernetes on a VPS. So that if for some reason i need to change my hosting provider, i can easily and quickly setup another server. Then setup all the projects with the kubernetes deployment files.
 
 ## Technologies
 
