@@ -46,12 +46,12 @@ spec:
           name: backend-pod
           # Resources
           resources:
-            limits:
-              cpu: 1000m
-              memory: 1Gi
-            requests:
-              cpu: 300m
-              memory: 300Mi
+            #limits:
+            #  cpu: 500m
+            #  memory: 500Mi
+            #requests:
+            #  cpu: 250m
+            #  memory: 250Mi
           # Mount volumes
           volumeMounts:
             - name: wordpress-persistent-volume

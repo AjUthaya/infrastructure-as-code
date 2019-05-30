@@ -1,0 +1,46 @@
+##### WordPress Uploads #####
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: wordpress-pvc
+  annotations:
+    pv.kubernetes.io/provisioned-by: dobs.csi.digitalocean.com
+spec:
+  # Access
+  accessModes:
+    - ReadWriteOnce
+  # Resources
+  capacity:
+    storage: 5G
+  storageClassName: do-block-storage
+  # Ref
+  csi:
+    driver: dobs.csi.digitalocean.com
+    fsType: ext4
+    volumeHandle: f7861813-1e59-11e9-b7e4-0a58ac14812c
+    volumeAttributes:
+      com.digitalocean.csi/noformat: "true"
+
+---
+##### MYSQL #####
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: mysql-pvc
+  annotations:
+    pv.kubernetes.io/provisioned-by: dobs.csi.digitalocean.com
+spec:
+  # Access
+  accessModes:
+    - ReadWriteOnce
+  # Resources
+  capacity:
+    storage: 5G
+  storageClassName: do-block-storage
+  # Ref
+  csi:
+    driver: dobs.csi.digitalocean.com
+    fsType: ext4
+    volumeHandle: f45376bf-1e59-11e9-959a-0a58ac1480dc
+    volumeAttributes:
+      com.digitalocean.csi/noformat: "true"
